@@ -236,7 +236,8 @@ document.getElementById("waBtn").onclick = async ()=>{
     catch(e){ if(e && e.name==="AbortError") return; }
   }
   // Desktop fallback: WhatsApp web.
-  const base = WA_PHONE ? "https://wa.me/"+WA_PHONE+"?text=" : "https://wa.me/?text=";
+  const digits = WA_PHONE.replace(/\D/g,"");
+  const base = digits ? "https://wa.me/"+digits+"?text=" : "https://wa.me/?text=";
   window.open(base+encodeURIComponent(planText),"_blank");
 };
 document.getElementById("restart").onclick = ()=>{
