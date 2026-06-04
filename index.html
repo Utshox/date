@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Where to eat? · Apkasų 17, Vilnius</title>
+<meta name="description" content="Spin the wheel to pick a place to eat near Apkasų g. 17, Vilnius." />
+<style>
+  :root{
+    --bg:#0f1020;
+    --card:#181a2e;
+    --accent:#ff5a5f;
+    --accent2:#ffb400;
+    --text:#f5f6ff;
+    --muted:#9aa0c0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 800px at 50% -10%,#26284a 0%,var(--bg) 60%);
+    color:var(--text);
+    min-height:100dvh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:22px 16px 40px;
+    overflow-x:hidden;
+  }
+  header{text-align:center;margin-bottom:14px}
+  h1{font-size:clamp(22px,6vw,34px);font-weight:800;letter-spacing:-.5px}
+  h1 .accent{color:var(--accent)}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px}
+  .wheel-wrap{position:relative;width:min(86vw,420px);aspect-ratio:1;margin:8px auto 0}
+  /* pointer */
+  .pointer{
+    position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+    width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;
+    border-top:30px solid var(--accent);z-index:5;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,.45));
+  }
+  canvas{
+    width:100%;height:100%;display:block;border-radius:50%;
+    box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 10px #20223c,0 0 0 12px #2c2f52;
+  }
+  .hub{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:54px;height:54px;border-radius:50%;background:var(--text);
+    display:flex;align-items:center;justify-content:center;font-size:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,.4);z-index:4;pointer-events:none;
+  }
+  .controls{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+  button{
+    font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;border:none;
+    border-radius:14px;padding:14px 26px;color:#fff;transition:transform .08s ease,opacity .2s;
+  }
+  button:active{transform:scale(.96)}
+  .spin{background:linear-gradient(135deg,var(--accent),#ff8a5f);box-shadow:0 8px 20px rgba(255,90,95,.4)}
+  .spin:disabled{opacity:.5;cursor:not-allowed}
+  .ghost{background:#23263f;color:var(--text)}
+  /* result */
+  .result{
+    margin-top:24px;width:min(92vw,440px);background:var(--card);border-radius:18px;
+    padding:20px;text-align:center;opacity:0;transform:translateY(10px);
+    transition:opacity .35s ease,transform .35s ease;pointer-events:none;
+    border:1px solid #262947;
+  }
+  .result.show{opacity:1;transform:translateY(0);pointer-events:auto}
+  .result .eyebrow{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:1px}
+  .result .name{font-size:26px;font-weight:800;margin:6px 0 4px}
+  .result .emoji{font-size:40px}
+  .result a{
+    display:inline-block;margin-top:14px;text-decoration:none;color:#0f1020;font-weight:700;
+    background:var(--accent2);padding:11px 22px;border-radius:12px;
+  }
+  .editor{margin-top:30px;width:min(92vw,440px)}
+  .editor summary{cursor:pointer;color:var(--muted);font-size:14px;user-select:none}
+  .editor textarea{
+    width:100%;margin-top:10px;min-height:160px;background:#10121f;color:var(--text);
+    border:1px solid #2a2d4d;border-radius:12px;padding:12px;font-size:14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical;
+  }
+  .editor .row{display:flex;gap:8px;margin-top:8px}
+  .editor button{font-size:14px;padding:10px 16px;flex:1}
+  footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Where do we <span class="accent">eat</span>?</h1>
+    <div class="sub">Spots near Apkasų g. 17 · Vilnius</div>
+  </header>
+
+  <div class="wheel-wrap">
+    <div class="pointer"></div>
+    <canvas id="wheel" width="800" height="800"></canvas>
+    <div class="hub">🍽️</div>
+  </div>
+
+  <div class="controls">
+    <button class="spin" id="spinBtn">SPIN</button>
+    <button class="ghost" id="randomBtn">Surprise me</button>
+  </div>
+
+  <div class="result" id="result">
+    <div class="eyebrow">Tonight you're eating at</div>
+    <div class="emoji" id="rEmoji">🍽️</div>
+    <div class="name" id="rName">—</div>
+    <a id="rMap" href="#" target="_blank" rel="noopener">Open in Google Maps →</a>
+  </div>
+
+  <details class="editor">
+    <summary>Edit the list of places</summary>
+    <textarea id="listBox" spellcheck="false"></textarea>
+    <div class="row">
+      <button class="spin" id="saveBtn">Save list</button>
+      <button class="ghost" id="resetBtn">Reset to defaults</button>
+    </div>
+  </details>
+
+  <footer>Built for Apkasų 17 · spin again if you're indecisive 🌀</footer>
+
+<script>
+// ---- Default places near Apkasų g. 17, Vilnius ----
+// Format per line:  Emoji | Name
+const DEFAULTS = [
+  "🥩 | Momo Grill",
+  "🍕 | Jurgis ir Drakonas",
+  "🍜 | Manami Sushi",
+  "🥘 | Etno Dvaras",
+  "🍝 | Vapiano",
+  "🧆 | Caif Café",
+  "🥞 | Gusto Blyninė",
+  "🍔 | Bigman",
+  "🐟 | Lauro Lapas",
+  "🍲 | Forto Dvaras",
+  "🌮 | Charlie Pizza",
+  "☕ | Huracan Coffee"
+];
+
+const COLORS = ["#ff5a5f","#ffb400","#36c6b0","#5b8def","#c66cff","#ff8a5f","#3fd07b","#f96d9b"];
+const STORE_KEY = "apkasu_wheel_places_v1";
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const SIZE = canvas.width;
+const R = SIZE/2;
+
+let places = load();
+let angle = 0;          // current rotation (radians)
+let spinning = false;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length) return arr; }
+  }catch(e){}
+  return DEFAULTS.map(parseLine).filter(Boolean);
+}
+function parseLine(line){
+  const t = line.trim();
+  if(!t) return null;
+  const i = t.indexOf("|");
+  if(i === -1) return {emoji:"🍽️", name:t};
+  return {emoji:t.slice(0,i).trim() || "🍽️", name:t.slice(i+1).trim()};
+}
+function mapsUrl(name){
+  return "https://www.google.com/maps/search/?api=1&query=" +
+         encodeURIComponent(name + " Vilnius");
+}
+
+function draw(){
+  const n = places.length;
+  const seg = (Math.PI*2)/n;
+  ctx.clearRect(0,0,SIZE,SIZE);
+  ctx.save();
+  ctx.translate(R,R);
+  ctx.rotate(angle);
+  for(let i=0;i<n;i++){
+    const start = i*seg;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,R-4,start,start+seg);
+    ctx.closePath();
+    ctx.fillStyle = COLORS[i % COLORS.length];
+    ctx.fill();
+    // label
+    ctx.save();
+    ctx.rotate(start + seg/2);
+    ctx.textAlign="right";
+    ctx.fillStyle="#10121f";
+    ctx.font = `600 ${Math.max(16, 30 - n)}px -apple-system,Segoe UI,Roboto,sans-serif`;
+    const label = places[i].emoji + "  " + places[i].name;
+    ctx.fillText(label, R-30, 8);
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+function spin(){
+  if(spinning || places.length<2) return;
+  spinning = true;
+  document.getElementById("spinBtn").disabled = true;
+  document.getElementById("result").classList.remove("show");
+
+  const n = places.length;
+  const seg = (Math.PI*2)/n;
+  const winner = Math.floor(Math.random()*n);
+  // pointer is at top (-90deg). We want winner's center under the pointer.
+  const targetCenter = -Math.PI/2;
+  const winnerMid = winner*seg + seg/2;
+  const spins = 6 + Math.floor(Math.random()*3); // full turns
+  const finalAngle = (spins*Math.PI*2) + (targetCenter - winnerMid);
+
+  const startAngle = angle % (Math.PI*2);
+  const duration = 4200 + Math.random()*800;
+  const startTime = performance.now();
+
+  function frame(now){
+    const t = Math.min(1,(now-startTime)/duration);
+    const ease = 1 - Math.pow(1-t,3); // easeOutCubic
+    angle = startAngle + (finalAngle - startAngle)*ease;
+    draw();
+    if(t<1){ requestAnimationFrame(frame); }
+    else{ spinning=false; document.getElementById("spinBtn").disabled=false; reveal(places[winner]); }
+  }
+  requestAnimationFrame(frame);
+}
+
+function reveal(p){
+  document.getElementById("rEmoji").textContent = p.emoji;
+  document.getElementById("rName").textContent = p.name;
+  document.getElementById("rMap").href = mapsUrl(p.name);
+  document.getElementById("result").classList.add("show");
+}
+
+// ---- events ----
+document.getElementById("spinBtn").onclick = spin;
+document.getElementById("randomBtn").onclick = spin;
+
+const listBox = document.getElementById("listBox");
+function fillBox(){ listBox.value = places.map(p=>`${p.emoji} | ${p.name}`).join("\n"); }
+document.getElementById("saveBtn").onclick = ()=>{
+  const arr = listBox.value.split("\n").map(parseLine).filter(Boolean);
+  if(arr.length<2){ alert("Add at least 2 places."); return; }
+  places = arr;
+  localStorage.setItem(STORE_KEY, JSON.stringify(places));
+  angle = 0; draw();
+  document.getElementById("result").classList.remove("show");
+};
+document.getElementById("resetBtn").onclick = ()=>{
+  localStorage.removeItem(STORE_KEY);
+  places = DEFAULTS.map(parseLine).filter(Boolean);
+  fillBox(); angle=0; draw();
+};
+
+fillBox();
+draw();
+</script>
+</body>
+</html>
