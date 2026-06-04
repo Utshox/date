@@ -2,259 +2,256 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Where to eat? · Apkasų 17, Vilnius</title>
-<meta name="description" content="Spin the wheel to pick a place to eat near Apkasų g. 17, Vilnius." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>A little question for you 💗</title>
+<meta name="description" content="Will you go on a date with me?" />
 <style>
   :root{
-    --bg:#0f1020;
-    --card:#181a2e;
-    --accent:#ff5a5f;
-    --accent2:#ffb400;
-    --text:#f5f6ff;
-    --muted:#9aa0c0;
+    --pink:#ff5d8f;
+    --pink-d:#e23e74;
+    --bg1:#ffd9e6;
+    --bg2:#ffeaf2;
+    --ink:#5b2336;
+    --card:#ffffff;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 800px at 50% -10%,#26284a 0%,var(--bg) 60%);
-    color:var(--text);
-    min-height:100dvh;
-    display:flex;flex-direction:column;align-items:center;
-    padding:22px 16px 40px;
-    overflow-x:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--ink);min-height:100dvh;overflow-x:hidden;
+    display:flex;align-items:center;justify-content:center;padding:20px;
   }
-  header{text-align:center;margin-bottom:14px}
-  h1{font-size:clamp(22px,6vw,34px);font-weight:800;letter-spacing:-.5px}
-  h1 .accent{color:var(--accent)}
-  .sub{color:var(--muted);font-size:14px;margin-top:4px}
-  .wheel-wrap{position:relative;width:min(86vw,420px);aspect-ratio:1;margin:8px auto 0}
-  /* pointer */
-  .pointer{
-    position:absolute;top:-6px;left:50%;transform:translateX(-50%);
-    width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;
-    border-top:30px solid var(--accent);z-index:5;
-    filter:drop-shadow(0 3px 4px rgba(0,0,0,.45));
+  .screen{display:none;width:min(94vw,460px);text-align:center;animation:pop .5s ease}
+  .screen.active{display:block}
+  @keyframes pop{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
+  h1{font-size:clamp(26px,7vw,40px);font-weight:800;line-height:1.15;letter-spacing:-.5px}
+  h2{font-size:clamp(20px,5.5vw,28px);font-weight:800;margin-bottom:6px}
+  .em{font-size:clamp(50px,16vw,84px);display:block;margin-bottom:10px;animation:beat 1.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  p.sub{color:#9a5e72;margin-top:8px;font-size:15px}
+
+  .btn{
+    font-family:inherit;font-weight:800;font-size:18px;border:none;border-radius:16px;
+    padding:15px 30px;cursor:pointer;transition:transform .08s ease,box-shadow .2s;
+    color:#fff;background:linear-gradient(135deg,var(--pink),#ff8fb0);
+    box-shadow:0 10px 24px rgba(255,93,143,.4);
   }
-  canvas{
-    width:100%;height:100%;display:block;border-radius:50%;
-    box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 10px #20223c,0 0 0 12px #2c2f52;
+  .btn:active{transform:scale(.96)}
+  .btn.ghost{background:#fff;color:var(--pink-d);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+  .btn.small{font-size:15px;padding:12px 20px}
+
+  .yesno{position:relative;margin-top:26px;height:90px;display:flex;gap:16px;justify-content:center;align-items:center}
+  #noBtn{background:#fff;color:#a05;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+  /* when it starts running it becomes fixed-positioned via JS */
+
+  /* date + time */
+  .field{margin:14px 0;text-align:left}
+  .field label{display:block;font-weight:700;margin-bottom:6px;font-size:14px;color:#8a4d61}
+  input[type=date],input[type=time]{
+    width:100%;font-family:inherit;font-size:17px;padding:14px;border-radius:14px;
+    border:2px solid #ffc2d6;background:#fff;color:var(--ink);
   }
-  .hub{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:54px;height:54px;border-radius:50%;background:var(--text);
-    display:flex;align-items:center;justify-content:center;font-size:24px;
-    box-shadow:0 4px 12px rgba(0,0,0,.4);z-index:4;pointer-events:none;
+  input:focus{outline:none;border-color:var(--pink)}
+
+  .foods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+  .food{
+    background:#fff;border:2px solid #ffd5e3;border-radius:16px;padding:14px 6px;cursor:pointer;
+    transition:transform .1s,border-color .15s,box-shadow .15s;
   }
-  .controls{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
-  button{
-    font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;border:none;
-    border-radius:14px;padding:14px 26px;color:#fff;transition:transform .08s ease,opacity .2s;
+  .food:active{transform:scale(.95)}
+  .food.sel{border-color:var(--pink);box-shadow:0 8px 18px rgba(255,93,143,.3);transform:translateY(-2px)}
+  .food .fe{font-size:30px;display:block}
+  .food .fl{font-size:12px;font-weight:700;margin-top:4px}
+  .food .fs{font-size:10px;color:#a8788a;margin-top:1px}
+
+  .card{background:var(--card);border-radius:20px;padding:24px;box-shadow:0 16px 40px rgba(255,93,143,.25);text-align:left}
+  .plan-row{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:16px}
+  .plan-row .k{font-size:20px}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+  .nav{margin-top:22px;display:flex;gap:10px;justify-content:center}
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:30px;font-weight:700;
+    opacity:0;transition:.3s;z-index:99;font-size:14px;
   }
-  button:active{transform:scale(.96)}
-  .spin{background:linear-gradient(135deg,var(--accent),#ff8a5f);box-shadow:0 8px 20px rgba(255,90,95,.4)}
-  .spin:disabled{opacity:.5;cursor:not-allowed}
-  .ghost{background:#23263f;color:var(--text)}
-  /* result */
-  .result{
-    margin-top:24px;width:min(92vw,440px);background:var(--card);border-radius:18px;
-    padding:20px;text-align:center;opacity:0;transform:translateY(10px);
-    transition:opacity .35s ease,transform .35s ease;pointer-events:none;
-    border:1px solid #262947;
-  }
-  .result.show{opacity:1;transform:translateY(0);pointer-events:auto}
-  .result .eyebrow{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:1px}
-  .result .name{font-size:26px;font-weight:800;margin:6px 0 4px}
-  .result .emoji{font-size:40px}
-  .result a{
-    display:inline-block;margin-top:14px;text-decoration:none;color:#0f1020;font-weight:700;
-    background:var(--accent2);padding:11px 22px;border-radius:12px;
-  }
-  .editor{margin-top:30px;width:min(92vw,440px)}
-  .editor summary{cursor:pointer;color:var(--muted);font-size:14px;user-select:none}
-  .editor textarea{
-    width:100%;margin-top:10px;min-height:160px;background:#10121f;color:var(--text);
-    border:1px solid #2a2d4d;border-radius:12px;padding:12px;font-size:14px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical;
-  }
-  .editor .row{display:flex;gap:8px;margin-top:8px}
-  .editor button{font-size:14px;padding:10px 16px;flex:1}
-  footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
-  footer a{color:var(--muted)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .heart{position:fixed;top:-40px;font-size:26px;pointer-events:none;z-index:50;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 </style>
 </head>
 <body>
-  <header>
-    <h1>Where do we <span class="accent">eat</span>?</h1>
-    <div class="sub">Spots near Apkasų g. 17 · Vilnius</div>
-  </header>
 
-  <div class="wheel-wrap">
-    <div class="pointer"></div>
-    <canvas id="wheel" width="800" height="800"></canvas>
-    <div class="hub">🍽️</div>
-  </div>
-
-  <div class="controls">
-    <button class="spin" id="spinBtn">SPIN</button>
-    <button class="ghost" id="randomBtn">Surprise me</button>
-  </div>
-
-  <div class="result" id="result">
-    <div class="eyebrow">Tonight you're eating at</div>
-    <div class="emoji" id="rEmoji">🍽️</div>
-    <div class="name" id="rName">—</div>
-    <a id="rMap" href="#" target="_blank" rel="noopener">Open in Google Maps →</a>
-  </div>
-
-  <details class="editor">
-    <summary>Edit the list of places</summary>
-    <textarea id="listBox" spellcheck="false"></textarea>
-    <div class="row">
-      <button class="spin" id="saveBtn">Save list</button>
-      <button class="ghost" id="resetBtn">Reset to defaults</button>
+  <!-- 1: THE QUESTION -->
+  <section class="screen active" id="s1">
+    <span class="em">🥺💗</span>
+    <h1>Will you go on a date with me?</h1>
+    <div class="yesno">
+      <button class="btn" id="yesBtn">Yes! 💕</button>
+      <button class="btn" id="noBtn">No</button>
     </div>
-  </details>
+  </section>
 
-  <footer>Built for Apkasų 17 · spin again if you're indecisive 🌀</footer>
+  <!-- 2: WHEN -->
+  <section class="screen" id="s2">
+    <span class="em">🎉</span>
+    <h2>Yaaay! Okay…</h2>
+    <p class="sub">When are you free, cutie?</p>
+    <div class="field"><label>Pick a day</label><input type="date" id="dDate"></div>
+    <div class="field"><label>Pick a time</label><input type="time" id="dTime" value="19:00"></div>
+    <div class="nav"><button class="btn" id="toFood">Next →</button></div>
+  </section>
+
+  <!-- 3: WHAT TO EAT -->
+  <section class="screen" id="s3">
+    <span class="em">😋</span>
+    <h2>What are you feeling?</h2>
+    <p class="sub">All spots are near Apkasų 17 (1–3 km) 📍</p>
+    <div class="foods" id="foods"></div>
+    <div class="nav">
+      <button class="btn ghost small" id="backWhen">←</button>
+      <button class="btn" id="toPlan">See our plan →</button>
+    </div>
+  </section>
+
+  <!-- 4: THE PLAN -->
+  <section class="screen" id="s4">
+    <span class="em">💌</span>
+    <h2 style="text-align:center">It's a date!</h2>
+    <p class="sub" style="text-align:center;margin-bottom:14px">Copy this and send it back to me 🥰</p>
+    <div class="card">
+      <div class="plan-row"><span class="k">📅</span><span id="pDate">—</span></div>
+      <div class="plan-row"><span class="k">⏰</span><span id="pTime">—</span></div>
+      <div class="plan-row"><span class="k">🍽️</span><span id="pFood">—</span></div>
+      <div class="plan-row"><span class="k">📍</span><a id="pMap" href="#" target="_blank" rel="noopener" style="color:var(--pink-d);font-weight:700">Open in Maps</a></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="copyBtn">💗 Copy the plan</button>
+      <button class="btn ghost" id="waBtn">Send on WhatsApp</button>
+      <button class="btn ghost small" id="restart">Start over</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast">Copied! 💕</div>
 
 <script>
-// ---- Default places near Apkasų g. 17, Vilnius ----
-// Format per line:  Emoji | Name
-const DEFAULTS = [
-  "🥩 | Momo Grill",
-  "🍕 | Jurgis ir Drakonas",
-  "🍜 | Manami Sushi",
-  "🥘 | Etno Dvaras",
-  "🍝 | Vapiano",
-  "🧆 | Caif Café",
-  "🥞 | Gusto Blyninė",
-  "🍔 | Bigman",
-  "🐟 | Lauro Lapas",
-  "🍲 | Forto Dvaras",
-  "🌮 | Charlie Pizza",
-  "☕ | Huracan Coffee"
+/* ===== EDIT THESE TWO LINES ===== */
+const MY_NAME  = "";   // your name (shows in the plan, e.g. "Ish"). Leave "" to hide.
+const WA_PHONE = "";   // your number for the WhatsApp button, intl format no + (e.g. "37060000000"). Leave "" to let her pick the chat.
+/* ================================ */
+
+// Food vibes -> a real spot near Apkasų g. 17, Vilnius (editable)
+const FOODS = [
+  {e:"🍕", l:"Pizza",      s:"Jurgis ir Drakonas"},
+  {e:"🍣", l:"Sushi",      s:"Manami"},
+  {e:"🥩", l:"Steak",      s:"Momo Grill"},
+  {e:"🍝", l:"Pasta",      s:"Vapiano"},
+  {e:"🍔", l:"Burgers",    s:"Bigman"},
+  {e:"🌮", l:"Mexican",    s:"Tres Mexicanos"},
+  {e:"🇱🇹", l:"Lithuanian", s:"Etno Dvaras"},
+  {e:"🍜", l:"Asian",      s:"Rene"},
+  {e:"☕", l:"Café & cake", s:"Huracan Coffee"},
 ];
 
-const COLORS = ["#ff5a5f","#ffb400","#36c6b0","#5b8def","#c66cff","#ff8a5f","#3fd07b","#f96d9b"];
-const STORE_KEY = "apkasu_wheel_places_v1";
+let picked = null;
 
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
-const SIZE = canvas.width;
-const R = SIZE/2;
+// ---- build food grid ----
+const foodsEl = document.getElementById("foods");
+FOODS.forEach((f,i)=>{
+  const d = document.createElement("div");
+  d.className="food"; d.dataset.i=i;
+  d.innerHTML = `<span class="fe">${f.e}</span><span class="fl">${f.l}</span><span class="fs">${f.s}</span>`;
+  d.onclick = ()=>{ picked=i; document.querySelectorAll(".food").forEach(x=>x.classList.remove("sel")); d.classList.add("sel"); };
+  foodsEl.appendChild(d);
+});
 
-let places = load();
-let angle = 0;          // current rotation (radians)
-let spinning = false;
+// ---- navigation ----
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); }
 
-function load(){
-  try{
-    const raw = localStorage.getItem(STORE_KEY);
-    if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length) return arr; }
-  }catch(e){}
-  return DEFAULTS.map(parseLine).filter(Boolean);
+// ---- screen 1: yes / no ----
+const noBtn = document.getElementById("noBtn");
+function runAway(){
+  noBtn.style.position="fixed";
+  const pad=70;
+  const x = pad + Math.random()*(window.innerWidth  - pad*2 - noBtn.offsetWidth);
+  const y = pad + Math.random()*(window.innerHeight - pad*2 - noBtn.offsetHeight);
+  noBtn.style.left = x+"px";
+  noBtn.style.top  = y+"px";
 }
-function parseLine(line){
-  const t = line.trim();
-  if(!t) return null;
-  const i = t.indexOf("|");
-  if(i === -1) return {emoji:"🍽️", name:t};
-  return {emoji:t.slice(0,i).trim() || "🍽️", name:t.slice(i+1).trim()};
-}
-function mapsUrl(name){
-  return "https://www.google.com/maps/search/?api=1&query=" +
-         encodeURIComponent(name + " Vilnius");
-}
+noBtn.addEventListener("mouseover", runAway);
+noBtn.addEventListener("touchstart", e=>{ e.preventDefault(); runAway(); }, {passive:false});
+noBtn.addEventListener("click", e=>{ e.preventDefault(); runAway(); });
 
-function draw(){
-  const n = places.length;
-  const seg = (Math.PI*2)/n;
-  ctx.clearRect(0,0,SIZE,SIZE);
-  ctx.save();
-  ctx.translate(R,R);
-  ctx.rotate(angle);
-  for(let i=0;i<n;i++){
-    const start = i*seg;
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,R-4,start,start+seg);
-    ctx.closePath();
-    ctx.fillStyle = COLORS[i % COLORS.length];
-    ctx.fill();
-    // label
-    ctx.save();
-    ctx.rotate(start + seg/2);
-    ctx.textAlign="right";
-    ctx.fillStyle="#10121f";
-    ctx.font = `600 ${Math.max(16, 30 - n)}px -apple-system,Segoe UI,Roboto,sans-serif`;
-    const label = places[i].emoji + "  " + places[i].name;
-    ctx.fillText(label, R-30, 8);
-    ctx.restore();
-  }
-  ctx.restore();
-}
+document.getElementById("yesBtn").onclick = ()=>{ rainHearts(); show("s2");
+  const t=new Date(); t.setDate(t.getDate()+1); document.getElementById("dDate").value=t.toISOString().slice(0,10); };
 
-function spin(){
-  if(spinning || places.length<2) return;
-  spinning = true;
-  document.getElementById("spinBtn").disabled = true;
-  document.getElementById("result").classList.remove("show");
-
-  const n = places.length;
-  const seg = (Math.PI*2)/n;
-  const winner = Math.floor(Math.random()*n);
-  // pointer is at top (-90deg). We want winner's center under the pointer.
-  const targetCenter = -Math.PI/2;
-  const winnerMid = winner*seg + seg/2;
-  const spins = 6 + Math.floor(Math.random()*3); // full turns
-  const finalAngle = (spins*Math.PI*2) + (targetCenter - winnerMid);
-
-  const startAngle = angle % (Math.PI*2);
-  const duration = 4200 + Math.random()*800;
-  const startTime = performance.now();
-
-  function frame(now){
-    const t = Math.min(1,(now-startTime)/duration);
-    const ease = 1 - Math.pow(1-t,3); // easeOutCubic
-    angle = startAngle + (finalAngle - startAngle)*ease;
-    draw();
-    if(t<1){ requestAnimationFrame(frame); }
-    else{ spinning=false; document.getElementById("spinBtn").disabled=false; reveal(places[winner]); }
-  }
-  requestAnimationFrame(frame);
-}
-
-function reveal(p){
-  document.getElementById("rEmoji").textContent = p.emoji;
-  document.getElementById("rName").textContent = p.name;
-  document.getElementById("rMap").href = mapsUrl(p.name);
-  document.getElementById("result").classList.add("show");
-}
-
-// ---- events ----
-document.getElementById("spinBtn").onclick = spin;
-document.getElementById("randomBtn").onclick = spin;
-
-const listBox = document.getElementById("listBox");
-function fillBox(){ listBox.value = places.map(p=>`${p.emoji} | ${p.name}`).join("\n"); }
-document.getElementById("saveBtn").onclick = ()=>{
-  const arr = listBox.value.split("\n").map(parseLine).filter(Boolean);
-  if(arr.length<2){ alert("Add at least 2 places."); return; }
-  places = arr;
-  localStorage.setItem(STORE_KEY, JSON.stringify(places));
-  angle = 0; draw();
-  document.getElementById("result").classList.remove("show");
+// ---- screen 2 -> 3 ----
+document.getElementById("toFood").onclick = ()=>{
+  if(!document.getElementById("dDate").value){ alert("Pick a day first 🥰"); return; }
+  show("s3");
 };
-document.getElementById("resetBtn").onclick = ()=>{
-  localStorage.removeItem(STORE_KEY);
-  places = DEFAULTS.map(parseLine).filter(Boolean);
-  fillBox(); angle=0; draw();
+document.getElementById("backWhen").onclick = ()=>show("s2");
+
+// ---- screen 3 -> 4 ----
+document.getElementById("toPlan").onclick = ()=>{
+  if(picked===null){ alert("Pick what you're craving 😋"); return; }
+  buildPlan(); rainHearts(); show("s4");
 };
 
-fillBox();
-draw();
+function fmtDate(v){
+  const d=new Date(v+"T00:00");
+  return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"});
+}
+function fmtTime(v){ return v; }
+
+let planText="";
+function buildPlan(){
+  const date = fmtDate(document.getElementById("dDate").value);
+  const time = fmtTime(document.getElementById("dTime").value);
+  const f = FOODS[picked];
+  document.getElementById("pDate").textContent = date;
+  document.getElementById("pTime").textContent = time;
+  document.getElementById("pFood").textContent = `${f.e} ${f.l} — ${f.s}`;
+  document.getElementById("pMap").href = "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(f.s+" Vilnius");
+
+  planText =
+`💖 It's a date! 💖
+📅 ${date}
+⏰ ${time}
+🍽️ ${f.e} ${f.l} @ ${f.s}
+📍 near Apkasų 17, Vilnius
+`+ (MY_NAME ? `\nCan't wait to see you — ${MY_NAME} 🥰` : `\nCan't wait to see you 🥰`);
+}
+
+// ---- copy + share ----
+document.getElementById("copyBtn").onclick = async ()=>{
+  try{ await navigator.clipboard.writeText(planText); }
+  catch(e){ const t=document.createElement("textarea"); t.value=planText; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }
+  toast("Copied! Now paste it to me 💕");
+};
+document.getElementById("waBtn").onclick = ()=>{
+  const base = WA_PHONE ? "https://wa.me/"+WA_PHONE+"?text=" : "https://wa.me/?text=";
+  window.open(base+encodeURIComponent(planText),"_blank");
+};
+document.getElementById("restart").onclick = ()=>{
+  picked=null; document.querySelectorAll(".food").forEach(x=>x.classList.remove("sel"));
+  noBtn.style.position=""; noBtn.style.left=""; noBtn.style.top=""; show("s1");
+};
+
+// ---- fx ----
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1900); }
+function rainHearts(){
+  const emojis=["💖","💕","💗","🌸","✨","💞"];
+  for(let i=0;i<26;i++){
+    const h=document.createElement("div");
+    h.className="heart"; h.textContent=emojis[i%emojis.length];
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(2+Math.random()*2)+"s";
+    h.style.fontSize=(18+Math.random()*22)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4200);
+  }
+}
 </script>
 </body>
 </html>
