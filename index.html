@@ -127,7 +127,7 @@
     </div>
     <div class="actions">
       <button class="btn" id="copyBtn">💗 Copy the plan</button>
-      <button class="btn ghost" id="waBtn">Send on WhatsApp</button>
+      <button class="btn ghost" id="waBtn">💌 Send it to me</button>
       <button class="btn ghost small" id="restart">Start over</button>
     </div>
   </section>
@@ -229,7 +229,13 @@ document.getElementById("copyBtn").onclick = async ()=>{
   catch(e){ const t=document.createElement("textarea"); t.value=planText; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }
   toast("Copied! Now paste it to me 💕");
 };
-document.getElementById("waBtn").onclick = ()=>{
+document.getElementById("waBtn").onclick = async ()=>{
+  // Native share keeps emoji intact (wa.me url-encoding mangles them on Android).
+  if(navigator.share){
+    try{ await navigator.share({text:planText}); return; }
+    catch(e){ if(e && e.name==="AbortError") return; }
+  }
+  // Desktop fallback: WhatsApp web.
   const base = WA_PHONE ? "https://wa.me/"+WA_PHONE+"?text=" : "https://wa.me/?text=";
   window.open(base+encodeURIComponent(planText),"_blank");
 };
